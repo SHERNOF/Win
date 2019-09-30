@@ -1,7 +1,8 @@
+const dotenv = require('dotenv')
+dotenv.config()
 const mongodb = require('mongodb')
-const connectionString = 'mongodb+srv://shernof:Shernof78@cluster0-xnirm.mongodb.net/WinDB?retryWrites=true&w=majority'
-mongodb.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true}, function(error, client){
+mongodb.connect(process.env.CONNECTIONSTRING, {useNewUrlParser: true, useUnifiedTopology: true}, function(error, client){
     module.exports = client.db()
     const app = require('./app')
-    app.listen(3000)
+    app.listen(process.env.PORT)
 })
