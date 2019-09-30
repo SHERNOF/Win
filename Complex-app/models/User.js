@@ -27,12 +27,12 @@ User.prototype.validate = function() {
     if (this.data.email == "") {this.errors.push("You must input a email")}
     if (!validator.isEmail(this.data.email)) {this.errors.push("You must provide a valid email address")}
     }
+
 User.prototype.register = function() {
         this.cleanUp()
         this.validate()
         if(!this.errors.length) {
-            usersCollections.insertOne(this.data)}
-            
+            usersCollections.insertOne(this.data)}     
 }    
     
 module.exports = User
