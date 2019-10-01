@@ -28,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "marked": "^0.7.0",
     "md5": "^2.2.1",
+    "mongo-connect": "0.0.6",
     "mongodb": "^3.3.2",
     "nodemon": "^1.19.3",
     "sanitize-html": "^1.20.1",
