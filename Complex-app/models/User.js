@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const usersCollections = require('../db').collection("users")
 const validator = require('validator')
 let User = function(data) {
@@ -23,25 +24,32 @@ User.prototype.validate = function() {
     if (this.data.username.length > 30) {this.errors.push("USername must not be more than 30 characters")}
     if (this.data.password == "") {this.errors.push("You must input a password")}
     if (this.data.password.length > 0 && this.data.username < 12) {this.errors.push("Password should not be more than 12 characters")}
-    if (this.data.password.length > 100) {this.errors.push("Password must not be more than 100 characters")}
+    if (this.data.password.length > 50) {this.errors.push("Password must not be more than 50 characters")}
     if (this.data.email == "") {this.errors.push("You must input a email")}
     if (!validator.isEmail(this.data.email)) {this.errors.push("You must provide a valid email address")}
     }
-User.prototype.login = function(callback){
+User.prototype.login = function(){
+  return new Promise((resolve, reject) => {
     this.cleanUp()
-    usersCollections.findOne({username: this.data.username}, (err, attemptedUser) => {
-        if(attemptedUser && attemptedUser.password == this.data.password){
-            callback('Nice')
+    usersCollections.findOne({username: this.data.username}).then((attemptedUser) => {
+        if(attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)){
+            resolve('Nice')
         }else{
-            callback('Fail')
+            reject('Fail')
         }
+    }).catch(function(){
+        reject("Pls try again later.")
     })
+  })
 }
 
 User.prototype.register = function() {
         this.cleanUp()
         this.validate()
         if(!this.errors.length) {
+            let salt = bcrypt.genSaltSync(10)
+                this.data.password = bcrypt.hashSync(this.data.password, salt)
+            // hash user password
             usersCollections.insertOne(this.data)}     
 }    
     
