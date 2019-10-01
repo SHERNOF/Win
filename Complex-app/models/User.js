@@ -27,15 +27,19 @@ User.prototype.validate = function() {
     if (this.data.email == "") {this.errors.push("You must input a email")}
     if (!validator.isEmail(this.data.email)) {this.errors.push("You must provide a valid email address")}
     }
-User.prototype.login = function(callback){
+User.prototype.login = function(){
+  return new Promise((resolve, reject) => {
     this.cleanUp()
-    usersCollections.findOne({username: this.data.username}, (err, attemptedUser) => {
+    usersCollections.findOne({username: this.data.username}).then((attemptedUser) => {
         if(attemptedUser && attemptedUser.password == this.data.password){
-            callback('Nice')
+            resolve('Nice')
         }else{
-            callback('Fail')
+            reject('Fail')
         }
+    }).catch(function(){
+        reject("Pls try again later.")
     })
+  })
 }
 
 User.prototype.register = function() {
