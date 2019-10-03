@@ -15,14 +15,20 @@ let sessionOptions = session({
 app.use(sessionOptions)
 app.use(flash())
 
+app.use(function(req, res, next){
+    res.locals.user = req.session.user
+    next()
+})
+
 const router = require('./router')
-4
-app.set('views', 'views')
-app.set('view engine', 'ejs')
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
+
 app.use(express.static('public'))
+app.set('views', 'views')
+app.set('view engine', 'ejs')
+
 app.use('/', router)
 
 module.exports = app
