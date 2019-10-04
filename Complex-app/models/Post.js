@@ -7,7 +7,6 @@ let Post = function(data, userid){
     this.userid = userid
 }
 
-
 Post.prototype.cleanUp = function() {
     if(typeof(this.data.title) != "string"){this.data.title = ""}
     if(typeof(this.data.body) != "string"){this.data.body = ""}
@@ -41,6 +40,21 @@ Post.prototype.create = function() {
             
         }else{
             reject(this.errors)
+        }
+    })
+}
+
+Post.findSingleById = function(id) {
+    return new Promise(async function(resolve, reject){
+        if(typeof(id) != "string" || !ObjectID.isValid(id)) {
+            reject()
+            return
+        }
+        let post = await postCollection.findOne({_id: new ObjectID(id)})
+        if(post){
+            resolve(post)
+        }else {
+            reject()
         }
     })
 }
