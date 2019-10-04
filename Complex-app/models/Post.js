@@ -1,4 +1,4 @@
-const postCollection = require('../db').collection('posts')
+const postCollection = require('../db').db().collection('posts')
 const ObjectID = require('mongodb').ObjectID
 
 let Post = function(data, userid){
@@ -32,9 +32,9 @@ Post.prototype.create = function() {
         this.validate()
         if(!this.errors.length){
             //save post in db
-            postCollection.insertOne(this.data).then(function(){
+            postCollection.insertOne(this.data).then(() => {
                 resolve()
-            }).catch(function(){
+            }).catch(() => {
                 this.errors.push("Pls try again")
                 reject(this.errors)
             })
