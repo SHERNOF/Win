@@ -16,7 +16,7 @@ app.use(sessionOptions)
 app.use(flash())
 
 const router = require('./router')
-4
+
 app.set('views', 'views')
 app.set('view engine', 'ejs')
 
